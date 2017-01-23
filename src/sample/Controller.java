@@ -65,19 +65,17 @@ public class Controller {
 
         sum.setEditable(false);
 
-        market.setContextMenu(new ContextMenu());
-
         market.addEventHandler(Event.ANY, new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
-                handlerMarket(event);
+                handlerProduct(event);
             }
         });
 
         section.addEventHandler(Event.ANY, new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
-                handlerSection(event);
+                handlerProduct(event);
             }
         });
 
@@ -105,72 +103,44 @@ public class Controller {
 
     }
 
-    private void handlerMarket(Event event){
-
-        TextField field = (TextField) event.getSource();
-
-        if(event.getEventType().getName().equals("KEY_RELEASED")) {
-
-            for (String s : marketSet) {
-
-                if ((s.indexOf(field.getText()) == 0) && (field.getText().length() > 1)) {
-
-                    //String resText = s;
-
-                    itemMarket.setText(s);
-
-                    itemMarket.setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent e) {
-                            field.setText(s);
-                        }
-                    });
-                    menuMarket.show(field, Side.BOTTOM, 0, 0);
-                }
-            }
-        }
-    }
-
-    private void handlerSection(Event event){
-
-        TextField field = (TextField) event.getSource();
-
-        if(event.getEventType().getName().equals("KEY_RELEASED")) {
-
-            for (String s : sectionSet) {
-
-                if ((s.indexOf(field.getText()) == 0) && (field.getText().length() > 1)) {
-
-                    itemSection.setText(s);
-
-                    itemSection.setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent e) {
-                            field.setText(s);
-                        }
-                    });
-                    menuSection.show(field, Side.BOTTOM, 0, 0);
-                }
-            }
-        }
-    }
-
     private void handlerProduct(Event event){
 
         TextField field = (TextField) event.getSource();
 
+        ContextMenu menu = field.getContextMenu();
+
+        System.out.println(menu.getItems());
+        
+        MenuItem item = menu.getItems().get(0);
+
+        HashSet<String> hashSet = null;
+        
+        if(field.getId().equals("market")){
+            hashSet = marketSet;
+        }
+        else if(field.getId().equals("section")){
+            hashSet = sectionSet;
+        }
+        else if(field.getId().equals("product")){
+            hashSet = productSet;
+        }
+        
+        System.out.println(item.getText());
+
         if(event.getEventType().getName().equals("KEY_RELEASED")) {
 
-            for (String s : productSet) {
+            for (String s : hashSet) {
 
                 if ((s.indexOf(field.getText()) == 0) && (field.getText().length() > 1)) {
 
-                    itemProduct.setText(s);
+                    item.setText(s);
 
-                    itemProduct.setOnAction(new EventHandler<ActionEvent>() {
+                    item.setOnAction(new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent e) {
                             field.setText(s);
                         }
                     });
-                    menuProduct.show(field, Side.BOTTOM, 0, 0);
+                    menu.show(field, Side.BOTTOM, 0, 0);
                 }
             }
         }
@@ -199,7 +169,7 @@ public class Controller {
         int numb = Integer.parseInt(number.getText());
         double price = Double.parseDouble(this.price.getText());
         sum.setText(String.valueOf(numb * price));
-        System.out.println("Работает");
+        //System.out.println("Работает");
     }
 
     @FXML
@@ -229,14 +199,16 @@ public class Controller {
         }catch (Exception e){
             System.out.println("Не установлена цена!");
         }
+        marketSet = setName("market");
+
+        sectionSet = setName("section");
+
+        productSet = setName("product");
     }
 
     @FXML
     public void clearPosition(){
-        market.setText("");
-        section.setText("");
-        product.setText("");
-        price.setText("0.0");
+        price.setText("0");
         number.setText("1");
         calcSum();
     }

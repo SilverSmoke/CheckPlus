@@ -26,17 +26,13 @@ public class DataBaseManager {
     public static ResultSet getResult(String query){
         try{
 
-            if(connect == null) {
-                connect = DriverManager.getConnection(urlDB, user, pass);
-            }
-
-            System.out.println(connect);
+            connect = DriverManager.getConnection(urlDB, user, pass);
 
             statement = connect.createStatement();
 
             result = statement.executeQuery(query);
 
-        }catch(Exception sqlEx){
+        }catch(SQLException sqlEx){
             sqlEx.printStackTrace();
         }finally {
             return result;
@@ -46,17 +42,13 @@ public class DataBaseManager {
     public void updateDB(String query){
         try{
 
-            if(connect == null) {
-                connect = DriverManager.getConnection(urlDB, user, pass);
-            }
+            connect = DriverManager.getConnection(urlDB, user, pass);
 
-            if(statement == null) {
-                statement = connect.createStatement();
-            }
+            statement = connect.createStatement();
 
             statement.executeUpdate(query);
 
-        }catch(Exception sqlEx) {
+        }catch(SQLException sqlEx) {
             sqlEx.printStackTrace();
         }finally {
             try{
@@ -67,11 +59,5 @@ public class DataBaseManager {
                 e.printStackTrace();
             }
         }
-    }
-
-    protected void finalize(){
-        try{connect.close();}catch(Exception ex){ex.printStackTrace();}
-        try{statement.close();}catch(Exception ex){ex.printStackTrace();}
-        try{result.close();}catch(Exception ex){ex.printStackTrace();}
     }
 }

@@ -86,12 +86,12 @@ public class CheckNode {
     public void addInBase(){
         //добавление позиции в базу
         DataBaseManager managerDB = new DataBaseManager();
-        String market = this.market;
-        String section = this.section;
-        String product = this.product;
-        Double price = this.price;
-        //managerDB.updateDB("INSERT INTO  `checkDB`.`test` (`id` ,`market` ,`section` ,`product` ,`price` ,`time`)VALUES (NULL , `market`, `selection`, `product`, `price`, UNIX_TIMESTAMP( )");
-        managerDB.updateDB("INSERT INTO `checkDB`.`test` (`id`, `market`, `section`, `product`, `price`, `time`) VALUES (NULL, '" + this.market + "', '" + section + "', '" + product + "', '" + price + "', UNIX_TIMESTAMP());");
+        for(int i = 0; i < this.number; i++) {
+            managerDB.updateDB("INSERT INTO `checkDB`.`test` " +
+                    "(`id`, `market`, `section`, `product`, `price`, `time`)" +
+                    " VALUES (NULL, '" + this.market + "', '" + this.section + "'," +
+                    " '" + this.product + "', '" + this.price + "'," + " UNIX_TIMESTAMP());");
+        }
     }
 
     private void extractOfBase(){
