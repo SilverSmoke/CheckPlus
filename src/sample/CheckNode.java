@@ -1,5 +1,7 @@
 package sample;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
@@ -29,7 +31,7 @@ public class CheckNode {
             System.out.println("Прибыль");
         }else{
             System.out.println("Получить из базы");
-            extractOfBase();
+            extractOfBase(transaction);
         }
     }
     
@@ -94,8 +96,25 @@ public class CheckNode {
         }
     }
 
-    private void extractOfBase(){
-        //извлечение из базы
+    private void extractOfBase(int transaction){
+        String query = "SELECT * FROM `test` WHERE `id` = " + transaction;
+
+        ResultSet resultSet = DataBaseManager.getResult(query);
+
+        System.out.println(resultSet);
+
+        try {
+            while(resultSet.next()) {
+                market = resultSet.getString(2);
+                section = resultSet.getString(3);
+                product = resultSet.getString(4);
+                price = Double.parseDouble(resultSet.getString(5));
+                purchaseDate = LocalDate.ofEpochDay(Long.parseLong(resultSet.getString(6)));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
