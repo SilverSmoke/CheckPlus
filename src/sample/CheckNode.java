@@ -2,7 +2,8 @@ package sample;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Created by belikov.a on 12.01.2017.
@@ -14,7 +15,7 @@ public class CheckNode {
     private String product;
     private double price;
     private int number;
-    private LocalDate purchaseDate;
+    private LocalDateTime purchaseDate;
     private int transaction;
 
     @Override
@@ -25,6 +26,7 @@ public class CheckNode {
     }
 
     public CheckNode(int transaction){
+        setTransaction(transaction);
         if(transaction == 0) {
             System.out.println("Новый элемент");
         }else if(transaction == -1){
@@ -53,7 +55,7 @@ public class CheckNode {
 
     public void setNumber(int number){ this.number = number; }
 
-    public void setPurchaseDate(LocalDate purchaseDate){
+    public void setPurchaseDate(LocalDateTime purchaseDate){
         this.purchaseDate = purchaseDate;
     }
 
@@ -77,7 +79,7 @@ public class CheckNode {
         return this.price;
     }
 
-    public LocalDate getPurchaseDate(){
+    public LocalDateTime getPurchaseDate(){
         return this.purchaseDate;
     }
 
@@ -88,11 +90,20 @@ public class CheckNode {
     public void addInBase(){
         //добавление позиции в базу
         DataBaseManager managerDB = new DataBaseManager();
-        for(int i = 0; i < this.number; i++) {
-            managerDB.updateDB("INSERT INTO `checkDB`.`test` " +
-                    "(`id`, `market`, `section`, `product`, `price`, `time`)" +
-                    " VALUES (NULL, '" + this.market + "', '" + this.section + "'," +
-                    " '" + this.product + "', '" + this.price + "'," + " UNIX_TIMESTAMP());");
+        System.out.print(this.transaction + transaction);
+        if(this.transaction == 0) {
+            System.out.println("INSERT");
+            for (int i = 0; i < this.number; i++) {
+                managerDB.updateDB("INSERT INTO `checkDB`.`test` " +
+                        "(`id`, `market`, `section`, `product`, `price`, `time`)" +
+                        " VALUES (NULL, '" + this.market + "', '" + this.section + "'," +
+                        " '" + this.product + "', '" + this.price + "'," +  this.purchaseDate.plusDays(1).toEpochSecond(ZoneOffset.ofHours(6)) + ";");
+            }
+        }else if(this.transaction > 0){
+            managerDB.updateDB("UPDATE test SET  `market` = '" + this.market + "', `section`='" + this.section + "'," +
+                    " `product`='" + this.product + "', `price`='" + this.price + "'," +
+                    " `time`= '" + this.purchaseDate.toEpochSecond(ZoneOffset.ofHours(6)) + "' WHERE `id` = '" + this.transaction + "';");
+
         }
     }
 
@@ -109,7 +120,7 @@ public class CheckNode {
                 section = resultSet.getString(3);
                 product = resultSet.getString(4);
                 price = Double.parseDouble(resultSet.getString(5));
-                purchaseDate = LocalDate.ofEpochDay(Long.parseLong(resultSet.getString(6)));
+                purchaseDate = LocalDateTime.ofEpochSecond(Long.parseLong(resultSet.getString(6)), 0, ZoneOffset.ofHours(6));
             }
 
         } catch (SQLException e) {

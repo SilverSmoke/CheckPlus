@@ -209,7 +209,7 @@ public class Controller {
         price.setText(node.getPrice().toString());
         number.setText("1");
         calcSum();
-        purchaseDate.setValue(node.getPurchaseDate());
+        purchaseDate.setValue(node.getPurchaseDate().toLocalDate());
 
     }
 
@@ -222,11 +222,11 @@ public class Controller {
             node.setProduct(product.getText());
             node.setPrice(Double.parseDouble(price.getText()));
             node.setNumber(Integer.parseInt(number.getText()));
-            node.setPurchaseDate(purchaseDate.getValue());
+            node.setPurchaseDate(purchaseDate.getValue().atStartOfDay());
             System.out.println(node);
             node.addInBase();
         }catch (Exception e){
-            System.out.println("Не установлена цена!");
+            e.printStackTrace();
         }
         marketSet = setName("market");
 
@@ -264,7 +264,7 @@ public class Controller {
     @FXML
     public void toForm(){
 
-        String query = "SELECT * FROM `TEST` WHERE `time` > " +
+        String query = "SELECT * FROM `TEST` WHERE `time` >= " +
                 intervalStart.getValue().atTime(0,0,0).toEpochSecond(ZoneOffset.ofHours(6))
                 + " AND `time` < " + intervalEnd.getValue().plusDays(1).atTime(0,0,0).toEpochSecond(ZoneOffset.ofHours(6))
                 + " ORDER BY `time`";
@@ -297,7 +297,7 @@ public class Controller {
                 screen.appendText(string + "\n");
             }
             screen.appendText("=============================================================================================" +
-                    "\n\t\t\t\t\t\t\t\t\t\tИтог:\t" + sumPrice);
+                    "\n\t\t\t\t\t\t\t\t\t\tИтог:\t" + sumPrice +"\n");
         } catch (SQLException e) {
             e.printStackTrace();
         }

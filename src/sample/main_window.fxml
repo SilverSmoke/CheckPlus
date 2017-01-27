@@ -117,9 +117,9 @@
                                             <Insets left="10.0" right="10.0" />
                                         </GridPane.margin>
                                     </TextField>
-                                    <TextField fx:id="number" alignment="CENTER" prefHeight="25.0" prefWidth="17.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                    <TextField fx:id="number" alignment="CENTER" prefHeight="25.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                                         <GridPane.margin>
-                                            <Insets left="10.0" right="10.0" />
+                                            <Insets left="30.0" right="30.0" />
                                         </GridPane.margin>
                                     </TextField>
                                     <TextField fx:id="sum" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="33.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
@@ -127,9 +127,9 @@
                                             <Insets left="10.0" right="10.0" />
                                         </GridPane.margin>
                                     </TextField>
-                                    <DatePicker fx:id="purchaseDate" prefHeight="25.0" prefWidth="91.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                                    <DatePicker fx:id="purchaseDate" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
                                         <GridPane.margin>
-                                            <Insets left="10.0" right="10.0" />
+                                            <Insets left="5.0" right="5.0" />
                                         </GridPane.margin>
                                     </DatePicker>
                                 </children>
@@ -175,7 +175,7 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <Button mnemonicParsing="false" text="Очистить" />
-                              <Button mnemonicParsing="false" text="Сформировать" onAction="#toForm">
+                              <Button mnemonicParsing="false" onAction="#toForm" text="Сформировать">
                                  <HBox.margin>
                                     <Insets left="50.0" right="50.0" />
                                  </HBox.margin>
