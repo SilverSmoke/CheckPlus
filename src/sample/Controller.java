@@ -23,6 +23,8 @@ public class Controller {
     public CheckBox bySection;
     public CheckBox byProduct;
     public TextArea screen;
+    public SplitPane root;
+    public Button save;
     @FXML
     private TextField market;
     @FXML
@@ -63,6 +65,8 @@ public class Controller {
 
         sum.setEditable(false);
 
+
+
         market.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) { handlerProduct(event); }
@@ -95,7 +99,7 @@ public class Controller {
             }
         });
 
-
+        market.requestFocus();
     }
 
 
@@ -122,19 +126,27 @@ public class Controller {
 
         MenuItem item = menu.getItems().get(0);
 
-        if(event.getCode().getName().equals("Enter")|event.getCode().getName().equals("Tab")){
-            if(!item.getText().equals("")){
-                field.setText(item.getText());
-            }
-
-            return;
-        }
-
         HashSet<String> hashSet = getHashSet(field);
 
         //System.out.println(item.getText());//Отладка
 
         if(event.getEventType().getName().equals("KEY_RELEASED")) {
+
+            if(event.getCode().getName().equals("Enter")){
+                if(!item.getText().equals("")){
+                    field.setText(item.getText());
+                }
+
+                if(field.equals(market))section.requestFocus();
+                if(field.equals(section))product.requestFocus();
+                if(field.equals(product))price.requestFocus();
+                if(field.equals(price))number.requestFocus();
+                if(field.equals(number))save.requestFocus();
+
+                return;
+            }
+
+            if((field.equals(price))||(field.equals(number)))return;
 
             for (String s : hashSet) {
 
@@ -176,10 +188,19 @@ public class Controller {
 
 
     public void handlerField(KeyEvent event){
+        TextField field = (TextField) event.getSource();
 
-        /*TextField field = (TextField) event.getSource();
+        if(event.getEventType().getName().equals("KEY_RELEASED")) {
 
-        System.out.println(event.getCode());*/
+            if(event.getCode().getName().equals("Enter")) {
+
+
+                if (field.equals(price)) number.requestFocus();
+                if (field.equals(number)) save.requestFocus();
+
+                return;
+            }
+        }
 
         calcSum();
 

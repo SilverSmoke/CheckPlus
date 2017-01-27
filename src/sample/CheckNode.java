@@ -94,10 +94,7 @@ public class CheckNode {
         if(this.transaction == 0) {
             System.out.println("INSERT");
             for (int i = 0; i < this.number; i++) {
-                managerDB.updateDB("INSERT INTO `checkDB`.`test` " +
-                        "(`id`, `market`, `section`, `product`, `price`, `time`)" +
-                        " VALUES (NULL, '" + this.market + "', '" + this.section + "'," +
-                        " '" + this.product + "', '" + this.price + "'," +  this.purchaseDate.plusDays(1).toEpochSecond(ZoneOffset.ofHours(6)) + ";");
+                managerDB.updateDB("INSERT INTO `checkDB`.`test` (`id`, `market`, `section`, `product`, `price`, `time`) VALUES (NULL, '" + this.market + "', '" + this.section + "', '" + this.product + "', '" + this.price + "', ' 1485489539';");
             }
         }else if(this.transaction > 0){
             managerDB.updateDB("UPDATE test SET  `market` = '" + this.market + "', `section`='" + this.section + "'," +
