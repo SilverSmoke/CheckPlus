@@ -90,18 +90,19 @@ public class CheckNode {
     public void addInBase(){
         //добавление позиции в базу
         DataBaseManager managerDB = new DataBaseManager();
-        System.out.print(this.transaction + transaction);
+
         if(this.transaction == 0) {
             System.out.println("INSERT");
             for (int i = 0; i < this.number; i++) {
-                managerDB.updateDB("INSERT INTO `checkDB`.`test` (`id`, `market`, `section`, `product`, `price`, `time`) VALUES (NULL, '" + this.market + "', '" + this.section + "', '" + this.product + "', '" + this.price + "', ' 1485489539';");
+                managerDB.updateDB("INSERT INTO `test` (`id`, `market`, `section`, `product`, `price`, `time`) VALUES (NULL, '" + this.market + "', '" + this.section + "', '" + this.product + "', '" + this.price + "', UNIX_TIMESTAMP());");
             }
         }else if(this.transaction > 0){
-            managerDB.updateDB("UPDATE test SET  `market` = '" + this.market + "', `section`='" + this.section + "'," +
+            managerDB.updateDB("UPDATE `test` SET  `market` = '" + this.market + "', `section`='" + this.section + "'," +
                     " `product`='" + this.product + "', `price`='" + this.price + "'," +
-                    " `time`= '" + this.purchaseDate.toEpochSecond(ZoneOffset.ofHours(6)) + "' WHERE `id` = '" + this.transaction + "';");
+                    " `time`= '" + this.purchaseDate.toEpochSecond(ZoneOffset.ofHours(-6)) + "' WHERE `id` = '" + this.transaction + "';");
 
         }
+        System.out.println(this.purchaseDate.toInstant(ZoneOffset.ofHours(-6)).getEpochSecond());
     }
 
     private void extractOfBase(int transaction){

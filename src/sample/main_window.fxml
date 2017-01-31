@@ -7,6 +7,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -137,7 +138,7 @@
                         <Label layoutX="14.0" layoutY="21.0" prefHeight="17.0" prefWidth="76.0" text="№ Позиции" />
                         <TextField fx:id="transaction" layoutX="90.0" layoutY="17.0" prefHeight="25.0" prefWidth="64.0" text="0" />
                         <Button fx:id="transactionOK" layoutX="160.0" layoutY="17.0" mnemonicParsing="false" onAction="#setTransaction" text="OK" textAlignment="CENTER" />
-                        <Button fx:id="save" layoutX="686.0" layoutY="181.0" mnemonicParsing="false" onAction="#savePosition" text="Сохранить" />
+                        <Button fx:id="save" layoutX="686.0" layoutY="181.0" mnemonicParsing="false" onAction="#savePosition" onKeyReleased="#savePosition" text="Сохранить" />
                         <Button fx:id="clear" layoutX="579.0" layoutY="181.0" mnemonicParsing="false" onAction="#clearPosition" text="Очистить" />
                         </children>
                   </AnchorPane>
@@ -208,21 +209,21 @@
                                     <Insets right="50.0" />
                                  </HBox.margin>
                               </Label>
-                              <CheckBox fx:id="byMarket" mnemonicParsing="false" text="Магазин">
+                              <RadioButton fx:id="byMarket" onMouseReleased="#actionRadio" mnemonicParsing="false" text="Магазин">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets right="20.0" />
                                  </HBox.margin>
-                              </CheckBox>
-                              <CheckBox fx:id="bySection" mnemonicParsing="false" text="Отдел">
+                              </RadioButton>
+                              <RadioButton fx:id="bySection" onMouseClicked="#actionRadio" mnemonicParsing="false" text="Отдел">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets right="20.0" />
                                  </HBox.margin>
-                              </CheckBox>
-                              <CheckBox fx:id="byProduct" mnemonicParsing="false" text="Товар">
+                              </RadioButton>
+                              <RadioButton fx:id="byProduct" onMouseClicked="#actionRadio" mnemonicParsing="false" text="Продукт">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets right="20.0" />
                                  </HBox.margin>
-                              </CheckBox>
+                              </RadioButton>
                            </children>
                         </HBox>
                      </children>

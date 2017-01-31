@@ -6,24 +6,26 @@ import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Controller {
 
     public CheckBox byDay;
     public CheckBox byMonths;
     public CheckBox brief;
-    public CheckBox byMarket;
-    public CheckBox bySection;
-    public CheckBox byProduct;
+    public RadioButton byMarket;
+    public RadioButton bySection;
+    public RadioButton byProduct;
     public TextArea screen;
     public SplitPane root;
+    @FXML
     public Button save;
     @FXML
     private TextField market;
@@ -50,6 +52,9 @@ public class Controller {
     private HashSet<String> sectionSet;
     private HashSet<String> productSet;
 
+    private Double sumPrice = 0.0;
+
+
     @FXML
     public void initialize(){
 
@@ -61,11 +66,20 @@ public class Controller {
 
         purchaseDate.setValue(LocalDate.now());
 
+        intervalStart.setValue(LocalDate.now());
+
+        intervalEnd.setValue(LocalDate.now());
+
         clearPosition();
 
         sum.setEditable(false);
 
-
+        save.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode().equals("ENTER"))savePosition();
+            }
+        });
 
         market.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
             @Override
@@ -108,7 +122,7 @@ public class Controller {
         System.out.println(event.getCode().getName());
         System.out.println(event.getCharacter());
 
-        System.out.println("==================================================");
+        System.out.println("===========================================");
 
 
 
@@ -215,12 +229,6 @@ public class Controller {
     }
 
     @FXML
-    public void onClickMarket(){
-        //System.out.println(market.getOnMouseClicked());
-        clearPosition();
-    }
-
-    @FXML
     public void setTransaction(){
         CheckNode node = new CheckNode(Integer.parseInt(transaction.getText()));
 
@@ -273,55 +281,103 @@ public class Controller {
         try {
             while (resultSet.next()) {
 
-                setName.add(resultSet.getString(1));
+                Iterator iter = setName.iterator();
+
+                int count = 0;
+
+                while(iter.hasNext()){
+
+                    if(iter.next().equals(resultSet.getString(1))){
+                        count++;
+                        break;
+                    }
+
+                }
+
+                if(count == 0)setName.add(resultSet.getString(1));
 
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
+
+        /*Iterator iter = setName.iterator();
+
+        while(iter.hasNext()){
+            System.out.println(iter.next());
+        }*/
+
         return setName;
     }
 
     @FXML
-    public void toForm(){
+    public void toForm() {
 
-        String query = "SELECT * FROM `TEST` WHERE `time` >= " +
-                intervalStart.getValue().atTime(0,0,0).toEpochSecond(ZoneOffset.ofHours(6))
-                + " AND `time` < " + intervalEnd.getValue().plusDays(1).atTime(0,0,0).toEpochSecond(ZoneOffset.ofHours(6))
+        String query = "SELECT * FROM `TEST` WHERE `time` > " +
+                intervalStart.getValue().atTime(0, 0, 0).toEpochSecond(ZoneOffset.ofHours(6))
+                + " AND `time` < " + intervalEnd.getValue().plusDays(1).atTime(0, 0, 0).toEpochSecond(ZoneOffset.ofHours(6))
                 + " ORDER BY `time`";
-
-        System.out.println(query);
 
         ResultSet resultSet = DataBaseManager.getResult(query);
 
+        //for (String sm : marketSet) {
+
+                    try {
+
+                        while (resultSet.next()) {
+
+                            //if ((byMarket.isSelected()) && (resultSet.getString(2).equals(sm))) {
 
 
-        try {
-            Double sumPrice = 0.0;
-            while(resultSet.next()){
+                                                String string = resultSet.getString(1);
 
-                String string = resultSet.getString(1);
-                string += "\t\t";
-                string += resultSet.getString(2);
-                string += "\t\t";
-                string += resultSet.getString(3);
-                string += "\t\t";
-                string += resultSet.getString(4);
-                string += "\t\t";
-                string += resultSet.getString(5);
-                string += "\t\t";
-                string += LocalDateTime.ofEpochSecond(resultSet.getLong(6),0 , ZoneOffset.ofHours(6));
+                                                string += "\t\t";
 
-                sumPrice += Double.parseDouble(resultSet.getString(5));
+                                                string += resultSet.getString(2);
 
-                System.out.println(string);
-                screen.appendText(string + "\n");
+                                                string += "\t\t";
+
+                                                string += resultSet.getString(3);
+
+                                                string += "\t\t";
+
+                                                string += resultSet.getString(4);
+
+                                                string += "\t\t";
+
+                                                string += resultSet.getString(5);
+
+                                                string += "\t\t";
+
+                                                string += LocalDate.ofEpochDay(resultSet.getLong(6) / 86400);
+
+                                                    sumPrice += Double.parseDouble(resultSet.getString(5));
+
+                                                screen.appendText(string + "\n");
+
+                                            }
+                                        //}
+
+                                        resultSet.beforeFirst();
+
+
+                                        screen.appendText("=============================================================================================" +
+
+                                                "\n\t\t\t\t\t\t\t\t\t\tИтог:\t" + sumPrice + "\n");
+
+
+                                        sumPrice = .0;
+
+                    }catch (SQLException e) {
+                        e.printStackTrace();
+                    }
             }
-            screen.appendText("=============================================================================================" +
-                    "\n\t\t\t\t\t\t\t\t\t\tИтог:\t" + sumPrice +"\n");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+    @FXML
+    public void actionRadio(MouseEvent event) {
+
+        System.out.println(event.getButton());
+        //String sourceId = event;
 
     }
 }
